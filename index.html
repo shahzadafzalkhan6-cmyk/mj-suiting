@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJ. Suiting | ایم جے سوٹنگ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a2744; --accent: #c9a227; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; color: #333; }
+        body.lang-ur-active, body.lang-ks-active { font-family: 'Noto Nastaliq Urdu', Arial, sans-serif; }
+        header { background: var(--primary); color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 0.5rem; }
+        .logo { font-size: 1.6rem; font-weight: bold; letter-spacing: 0.5px; }
+        .logo span { color: var(--accent); }
+        .lang-tabs { display: flex; gap: 0; border-radius: 5px; overflow: hidden; border: 2px solid var(--accent); flex-wrap: wrap; }
+        .lang-tab { cursor: pointer; padding: 8px 16px; background: transparent; color: white; font-weight: bold; border: none; font-size: 0.95rem; }
+        .lang-tab.active { background: var(--accent); color: var(--primary); }
+        .lang-tab:not(.active) { background: transparent; color: #ddd; }
+        .lang-ur, .lang-ks { display: none; }
+        body.lang-ur-active .lang-ur, body.lang-ks-active .lang-ks { direction: rtl; text-align: right; }
+        nav { background: #24345c; padding: 0.8rem; position: sticky; top: 60px; z-index: 99; }
+        nav ul { list-style: none; display: flex; justify-content: center; gap: 2rem; margin: 0; padding: 0; flex-wrap: wrap; }
+        nav a { color: white; text-decoration: none; font-weight: 500; }
+        section { padding: 4rem 1rem; max-width: 1200px; margin: 0 auto; }
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(10,15,30,0.95), rgba(26,39,68,0.95));
+            display: flex; align-items: center; justify-content: center; text-align: center; color: white;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .gallery img {
+            width: 100%; height: 250px; object-fit: cover; border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: 0.3s;
+        }
+        .gallery img:hover { transform: scale(1.05); }
+        .video-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+        .video-gallery video { width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background:#000; display:block; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+        .product-card { border:1px solid #ddd; padding:1.2rem; text-align:center; border-radius:8px; background:white; }
+        .product-card h3 { color: var(--primary); margin-bottom: 0.3rem; }
+        .whatsapp-btn {
+            position: fixed; bottom: 25px; right: 25px; background: #25D366; color: white;
+            padding: 14px 24px; border-radius: 50px; text-decoration: none; box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+            font-weight: bold; z-index: 1000;
+        }
+        footer { background: var(--primary); color: white; text-align: center; padding: 2.5rem 1rem; }
+        .admin-link { background:none; border:none; color:#aab4bd; font-size:0.8rem; cursor:pointer; text-decoration:underline; margin-top:1rem; padding:0; font-family: Arial, sans-serif; }
+        .admin-link:hover { color:#fff; }
+        .admin-overlay { display:none; position:fixed; inset:0; background:rgba(10,15,30,0.75); z-index:2000; align-items:flex-start; justify-content:center; overflow-y:auto; padding:2rem 1rem; }
+        .admin-overlay.open { display:flex; }
+        .admin-box { background:#fff; border-radius:10px; max-width:520px; width:100%; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.3); font-family: Arial, sans-serif; margin-bottom:2rem; }
+        .admin-box-header { background:var(--primary); color:#fff; padding:1rem 1.5rem; display:flex; justify-content:space-between; align-items:center; }
+        .admin-box-header h3 { margin:0; font-size:1.1rem; }
+        .admin-close { background:none; border:none; color:#fff; font-size:1.4rem; cursor:pointer; line-height:1; }
+        .admin-box-body { padding:1.5rem; }
+        .admin-field { margin-bottom:1rem; }
+        .admin-field label { display:block; font-size:0.85rem; font-weight:bold; color:#444; margin-bottom:0.3rem; }
+        .admin-field input[type="password"], .admin-field input[type="text"], .admin-field input[type="file"] {
+            width:100%; padding:0.6rem 0.7rem; border:1px solid #ccc; border-radius:6px; font-size:0.95rem; box-sizing:border-box;
+        }
+        .admin-btn { background:var(--accent); color:var(--primary); border:none; padding:0.65rem 1.2rem; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.95rem; }
+        .admin-btn:hover { opacity:0.9; }
+        .admin-btn.secondary { background:#eee; color:#333; }
+        .admin-btn.danger { background:#c0392b; color:#fff; }
+        .admin-msg { font-size:0.85rem; margin-top:0.6rem; min-height:1.1em; }
+        .admin-msg.error { color:#c0392b; }
+        .admin-msg.success { color:#1a7a3f; }
+        .admin-section-title { font-size:0.95rem; font-weight:bold; color:var(--primary); margin:0 0 0.8rem 0; padding-bottom:0.4rem; border-bottom:2px solid #eee; }
+        .admin-divider { border:none; border-top:1px solid #eee; margin:1.5rem 0; }
+        .admin-thumb-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:0.7rem; margin-top:0.8rem; }
+        .admin-thumb { position:relative; border-radius:6px; overflow:hidden; border:1px solid #ddd; }
+        .admin-thumb img { width:100%; height:90px; object-fit:cover; display:block; }
+        .admin-thumb .thumb-caption { font-size:0.65rem; color:#555; padding:0.2rem 0.3rem; background:#fafafa; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .admin-thumb .thumb-remove { position:absolute; top:4px; right:4px; background:rgba(192,57,43,0.9); color:#fff; border:none; width:22px; height:22px; border-radius:50%; cursor:pointer; font-size:0.85rem; line-height:1; }
+        .admin-thumb .thumb-remove:hover { background:#c0392b; }
+        .admin-thumb.video-thumb video { width:100%; height:90px; object-fit:cover; display:block; background:#000; }
+        .admin-logout-row { display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem; }
+    </style>
+</head>
+<body class="lang-en-active">
+
+    <header>
+        <div class="logo">MJ<span>.</span> SUITING</div>
+        <div class="lang-tabs">
+            <button class="lang-tab active" id="tab-en" onclick="setLanguage('en')">English</button>
+            <button class="lang-tab" id="tab-ur" onclick="setLanguage('ur')">اردو</button>
+            <button class="lang-tab" id="tab-ks" onclick="setLanguage('ks')">کٲشُر</button>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#home"><span class="lang-en" style="display: inline;">Home</span><span class="lang-ur" style="display: none;">ہوم</span><span class="lang-ks" style="display: none;">گَره</span></a></li>
+            <li><a href="#services"><span class="lang-en" style="display: inline;">Services</span><span class="lang-ur" style="display: none;">خدمات</span><span class="lang-ks" style="display: none;">خدمات</span></a></li>
+            <li><a href="#gallery"><span class="lang-en" style="display: inline;">Gallery</span><span class="lang-ur" style="display: none;">گیلری</span><span class="lang-ks" style="display: none;">گیلری</span></a></li>
+            <li><a href="#about"><span class="lang-en" style="display: inline;">About Us</span><span class="lang-ur" style="display: none;">ہمارے بارے میں</span><span class="lang-ks" style="display: none;">اسہ بارس منز</span></a></li>
+            <li><a href="#contact"><span class="lang-en" style="display: inline;">Contact</span><span class="lang-ur" style="display: none;">رابطہ</span><span class="lang-ks" style="display: none;">رابطہ</span></a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div>
+            <h1 class="lang-en" style="display: block;">Welcome to MJ. Suiting</h1>
+            <h1 class="lang-ur" style="display: none;">ایم جے سوٹنگ میں خوش آمدید</h1>
+            <h1 class="lang-ks" style="display: none;">ایم جے سوٹنگ سیتہ خوش آمدید</h1>
+            <p class="lang-en" style="display: block;">Shop # B-61, Panorama Centre, Main Double Road, Cricket Stadium, Rawalpindi</p>
+            <p class="lang-ur" style="display: none;">دکان نمبر B-61، پنوراما سینٹر، مین ڈبل روڈ، کرکٹ اسٹیڈیم، راولپنڈی</p>
+            <p class="lang-ks" style="display: none;">دوکان B-61، پنوراما سینٹر، مین ڈبل روڈ، کرکٹ اسٹیڈیم، راولپنڈی</p>
+        </div>
+    </section>
+
+    <section id="proprietor" style="padding: 2.5rem 1rem; max-width: 1200px; margin: 0 auto;">
+        <div style="display:flex; align-items:center; gap:2rem; flex-wrap:wrap; justify-content:center; text-align:center;">
+            <div>
+                <h2 style="margin:0 0 0.3rem 0; color:var(--primary);">Mr. Umair Abbasi</h2>
+                <p class="lang-en" style="margin: 0px; color: rgb(102, 102, 102); display: block;">Proprietor, MJ. Suiting</p>
+                <p class="lang-ur" style="margin: 0px; color: rgb(102, 102, 102); display: none;">مالک، ایم جے سوٹنگ</p>
+                <p class="lang-ks" style="margin: 0px; color: rgb(102, 102, 102); display: none;">مالک، ایم جے سوٹنگ</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" style="background:#f9f9f9;">
+        <h2 style="text-align:center; margin-bottom:2rem;"><span class="lang-en" style="display: inline;">Our Services</span><span class="lang-ur" style="display: none;">ہماری خدمات</span><span class="lang-ks" style="display: none;">اسہ خدمات</span></h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <h3><span class="lang-en" style="display: inline;">Pant Coat</span><span class="lang-ur" style="display: none;">پینٹ کوٹ</span><span class="lang-ks" style="display: none;">پینٹ کوٹ</span></h3>
+                <p><span class="lang-en" style="display: inline;">Custom tailored to perfect fit</span><span class="lang-ur" style="display: none;">آپ کی پسند کے مطابق پرفیکٹ فٹنگ</span><span class="lang-ks" style="display: none;">تہٕنٛز پسندہٕ مطابق پرفیکٹ فٹنگ</span></p>
+            </div>
+            <div class="product-card">
+                <h3><span class="lang-en" style="display: inline;">Shalwar Qameez</span><span class="lang-ur" style="display: none;">شلوار قمیض</span><span class="lang-ks" style="display: none;">شلوار قمیض</span></h3>
+                <p><span class="lang-en" style="display: inline;">Traditional stitching, premium finish</span><span class="lang-ur" style="display: none;">روایتی سلائی، اعلیٰ معیار کی تیاری</span><span class="lang-ks" style="display: none;">روایتی سلایی، اعلیٰ معیار</span></p>
+            </div>
+            <div class="product-card">
+                <h3><span class="lang-en" style="display: inline;">Waistcoat</span><span class="lang-ur" style="display: none;">ویسٹ کوٹ</span><span class="lang-ks" style="display: none;">ویسٹ کوٹ</span></h3>
+                <p><span class="lang-en" style="display: inline;">Elegant designs for every occasion</span><span class="lang-ur" style="display: none;">ہر موقع کے لیے شاندار ڈیزائن</span><span class="lang-ks" style="display: none;">ہر مہٕنِز خٲطرہٕ شاندار ڈیزائن</span></p>
+            </div>
+            <div class="product-card">
+                <h3><span class="lang-en" style="display: inline;">Safari Suit</span><span class="lang-ur" style="display: none;">سفاری سوٹ</span><span class="lang-ks" style="display: none;">سفاری سوٹ</span></h3>
+                <p><span class="lang-en" style="display: inline;">Comfortable formal wear</span><span class="lang-ur" style="display: none;">آرام دہ فارمل لباس</span><span class="lang-ks" style="display: none;">آرام دِہ فارمل پوش</span></p>
+            </div>
+            <div class="product-card">
+                <h3><span class="lang-en" style="display: inline;">Pant Shirt</span><span class="lang-ur" style="display: none;">پینٹ شرٹ</span><span class="lang-ks" style="display: none;">پینٹ شرٹ</span></h3>
+                <p><span class="lang-en" style="display: inline;">Everyday smart casual stitching</span><span class="lang-ur" style="display: none;">روزمرہ سمارٹ کیجول سلائی</span><span class="lang-ks" style="display: none;">روزمرہ سمارٹ سلایی</span></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 style="text-align:center; margin-bottom:2rem;"><span class="lang-en" style="display: inline;">Shop Gallery</span><span class="lang-ur" style="display: none;">دکان کی گیلری</span><span class="lang-ks" style="display: none;">دوکانہٕ ہنٛز گیلری</span></h2>
+        <div class="gallery" id="gallery-grid"></div>
+        <p id="gallery-empty" style="text-align:center; color:#888; display:none;">
+            <span class="lang-en" style="display: inline;">No photos yet.</span><span class="lang-ur" style="display: none;">ابھی کوئی تصویر نہیں۔</span><span class="lang-ks" style="display: none;">تر اوس کانہہ عکس چھُنہٕ۔</span>
+        </p>
+
+        <h3 style="text-align:center; margin:2.5rem 0 1.2rem 0; color:var(--primary);"><span class="lang-en" style="display: inline;">Shop Videos</span><span class="lang-ur" style="display: none;">دکان کی ویڈیوز</span><span class="lang-ks" style="display: none;">دوکانہٕ ہنٛز ویڈیوز</span></h3>
+        <div class="video-gallery" id="video-gallery-grid"></div>
+        <p id="video-gallery-empty" style="text-align:center; color:#888; display:none;">
+            <span class="lang-en" style="display: inline;">No videos yet.</span><span class="lang-ur" style="display: none;">ابھی کوئی ویڈیو نہیں۔</span><span class="lang-ks" style="display: none;">تر اوس کانہہ ویڈیو چھُنہٕ۔</span>
+        </p>
+    </section>
+
+    <section id="about" style="background:#f9f9f9;">
+        <h2><span class="lang-en" style="display: inline;">About Us</span><span class="lang-ur" style="display: none;">ہمارے بارے میں</span><span class="lang-ks" style="display: none;">اسہ بارس منز</span></h2>
+        <p class="lang-en" style="display: block;">MJ. Suiting is a trusted tailoring shop in Rawalpindi, offering pant coats, shalwar qameez, waistcoats, safari suits, and pant shirts with a wide collection of premium imported and local fabrics. We take pride in precise stitching and timely delivery.</p>
+        <p class="lang-ur" style="display: none;">ایم جے سوٹنگ راولپنڈی کی ایک معتبر سلائی کی دکان ہے جو پینٹ کوٹ، شلوار قمیض، ویسٹ کوٹ، سفاری سوٹ اور پینٹ شرٹ کے ساتھ ساتھ اعلیٰ درجے کے درآمدی اور مقامی کپڑوں کا وسیع ذخیرہ پیش کرتی ہے۔ ہمیں بہترین سلائی اور بروقت ڈیلیوری پر فخر ہے۔</p>
+        <p class="lang-ks" style="display: none;">ایم جے سوٹنگ راولپنڈی ہنٛز اکھ معتبر سلایی دوکان چھِہ، یتھ منز پینٹ کوٹ، شلوار قمیض، ویسٹ کوٹ، سفاری سوٹ تہٕ پینٹ شرٹ ہیکَن مِلِتھ، تہٕ اعلیٰ معیارَچ درآمدی تہٕ مقامی کپڑہٕ چھِ دَستیاب۔ اَسہِ چھُ فخر بہترین سلایی تہٕ وقتہٕ پؠٹھ ڈیلیوری پؠٹھ۔</p>
+    </section>
+
+    <section id="contact">
+        <h2><span class="lang-en" style="display: inline;">Contact Us</span><span class="lang-ur" style="display: none;">رابطہ کریں</span><span class="lang-ks" style="display: none;">رابطہٕ کریو</span></h2>
+        <p><strong class="lang-en" style="display: inline;">Proprietor:</strong><strong class="lang-ur" style="display: none;">مالک:</strong><strong class="lang-ks" style="display: none;">مالک:</strong> Mr. Umair Abbasi</p>
+        <p><strong class="lang-en" style="display: inline;">Cell / WhatsApp:</strong><strong class="lang-ur" style="display: none;">سیل / واٹس ایپ:</strong><strong class="lang-ks" style="display: none;">سیل / واٹس ایپ:</strong> 0333-9836544, 0333-5374390</p>
+        <p><strong class="lang-en" style="display: inline;">Address:</strong><strong class="lang-ur" style="display: none;">پتہ:</strong><strong class="lang-ks" style="display: none;">پتہٕ:</strong> <span class="lang-en" style="display: inline;">Shop # B-61, Panorama Centre, Main Double Road, Cricket Stadium, Rawalpindi</span><span class="lang-ur" style="display: none;">دکان نمبر B-61، پنوراما سینٹر، مین ڈبل روڈ، کرکٹ اسٹیڈیم، راولپنڈی</span><span class="lang-ks" style="display: none;">دوکان B-61، پنوراما سینٹر، مین ڈبل روڈ، کرکٹ اسٹیڈیم، راولپنڈی</span></p>
+    </section>
+
+    <a href="https://wa.me/923339836544" class="whatsapp-btn" target="_blank">
+        <span class="lang-en" style="display: inline;">💬 Chat with Mr. Umair Abbasi</span>
+        <span class="lang-ur" style="display: none;">💬 مسٹر عمیر عباسی سے بات کریں</span>
+        <span class="lang-ks" style="display: none;">💬 مسٹر عمیر عباسی سیتہ گَل کریو</span>
+    </a>
+
+    <footer>
+        <p class="lang-en" style="display: block;">© MJ. Suiting • Panorama Centre, Rawalpindi</p>
+        <p class="lang-ur" style="display: none;">© ایم جے سوٹنگ • پنوراما سینٹر، راولپنڈی</p>
+        <p class="lang-ks" style="display: none;">© ایم جے سوٹنگ • پنوراما سینٹر، راولپنڈی</p>
+        <button class="admin-link" onclick="openAdminLogin()">Admin</button>
+    </footer>
+
+    <div class="admin-overlay" id="admin-login-overlay">
+        <div class="admin-box">
+            <div class="admin-box-header">
+                <h3>Admin Login</h3>
+                <button class="admin-close" onclick="closeAdminLogin()">×</button>
+            </div>
+            <div class="admin-box-body">
+                <div class="admin-field">
+                    <label for="admin-pass-input">Password</label>
+                    <input type="password" id="admin-pass-input" placeholder="Enter admin password" autocomplete="off">
+                </div>
+                <button class="admin-btn" onclick="attemptAdminLogin()">Login</button>
+                <div class="admin-msg error" id="admin-login-msg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-overlay" id="admin-panel-overlay">
+        <div class="admin-box" style="max-width:640px;">
+            <div class="admin-box-header">
+                <h3>Gallery Admin Panel</h3>
+                <button class="admin-close" onclick="closeAdminPanel()">×</button>
+            </div>
+            <div class="admin-box-body">
+                <div class="admin-section-title">Add Photo to Gallery</div>
+                <div class="admin-field">
+                    <label for="admin-photo-file">Choose photo</label>
+                    <input type="file" id="admin-photo-file" accept="image/*">
+                </div>
+                <div class="admin-field">
+                    <label for="admin-photo-caption">Caption (optional)</label>
+                    <input type="text" id="admin-photo-caption" placeholder="e.g. New Fabric Arrivals">
+                </div>
+                <button class="admin-btn" onclick="addGalleryPhoto()">+ Add to Gallery</button>
+                <div class="admin-msg" id="admin-add-msg"></div>
+
+                <hr class="admin-divider">
+
+                <div class="admin-section-title">Current Gallery Photos</div>
+                <div class="admin-thumb-grid" id="admin-thumb-grid"></div>
+
+                <hr class="admin-divider">
+
+                <div class="admin-section-title">Add Video to Gallery</div>
+                <div class="admin-field">
+                    <label for="admin-video-file">Choose video (keep it short — large videos may not save)</label>
+                    <input type="file" id="admin-video-file" accept="video/*">
+                </div>
+                <div class="admin-field">
+                    <label for="admin-video-caption">Caption (optional)</label>
+                    <input type="text" id="admin-video-caption" placeholder="e.g. Shop Walkthrough">
+                </div>
+                <button class="admin-btn" onclick="addGalleryVideo()">+ Add Video</button>
+                <div class="admin-msg" id="admin-video-add-msg"></div>
+
+                <hr class="admin-divider">
+
+                <div class="admin-section-title">Current Gallery Videos</div>
+                <div class="admin-thumb-grid" id="admin-video-thumb-grid"></div>
+
+                <hr class="admin-divider">
+
+                <div class="admin-section-title">Change Admin Password</div>
+                <div class="admin-field">
+                    <label for="admin-cur-pass">Current password</label>
+                    <input type="password" id="admin-cur-pass" autocomplete="off">
+                </div>
+                <div class="admin-field">
+                    <label for="admin-new-pass">New password</label>
+                    <input type="password" id="admin-new-pass" autocomplete="off">
+                </div>
+                <div class="admin-field">
+                    <label for="admin-new-pass-confirm">Confirm new password</label>
+                    <input type="password" id="admin-new-pass-confirm" autocomplete="off">
+                </div>
+                <button class="admin-btn secondary" onclick="changeAdminPassword()">Update Password</button>
+                <div class="admin-msg" id="admin-pass-msg"></div>
+
+                <div class="admin-logout-row">
+                    <button class="admin-btn secondary" onclick="closeAdminPanel()">Close Panel</button>
+                    <button class="admin-btn danger" onclick="adminLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_GALLERY = [];
+        const GALLERY_KEY = 'mj_suiting_gallery_v1';
+        const PASS_KEY = 'mj_suiting_admin_pass_v1';
+        const SESSION_KEY = 'mj_suiting_admin_session';
+        const DEFAULT_ADMIN_PASSWORD = 'admin123';
+
+        function getGallery() {
+            try {
+                const raw = localStorage.getItem(GALLERY_KEY);
+                if (raw) return JSON.parse(raw);
+            } catch (e) {}
+            saveGallery(DEFAULT_GALLERY);
+            return DEFAULT_GALLERY.slice();
+        }
+
+        function saveGallery(list) {
+            try {
+                localStorage.setItem(GALLERY_KEY, JSON.stringify(list));
+            } catch (e) {
+                alert('Could not save gallery changes. Your browser storage may be full — try removing an older photo first, or use a smaller image.');
+            }
+        }
+
+        function getAdminPassword() {
+            try {
+                return localStorage.getItem(PASS_KEY) || DEFAULT_ADMIN_PASSWORD;
+            } catch (e) {
+                return DEFAULT_ADMIN_PASSWORD;
+            }
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('gallery-grid');
+            const emptyMsg = document.getElementById('gallery-empty');
+            if (!grid) return;
+            const list = getGallery();
+            grid.innerHTML = '';
+            if (list.length === 0) {
+                if (emptyMsg) emptyMsg.style.display = 'block';
+            } else {
+                if (emptyMsg) emptyMsg.style.display = 'none';
+                list.forEach(item => {
+                    const img = document.createElement('img');
+                    img.src = item.src;
+                    img.alt = item.alt || 'Gallery photo';
+                    grid.appendChild(img);
+                });
+            }
+            renderAdminThumbs();
+        }
+
+        function renderAdminThumbs() {
+            const thumbGrid = document.getElementById('admin-thumb-grid');
+            if (!thumbGrid) return;
+            const list = getGallery();
+            thumbGrid.innerHTML = '';
+            if (list.length === 0) {
+                thumbGrid.innerHTML = '<p style="color:#888; font-size:0.85rem;">No photos in the gallery yet.</p>';
+                return;
+            }
+            list.forEach((item, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'admin-thumb';
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.alt = item.alt || '';
+                const cap = document.createElement('div');
+                cap.className = 'thumb-caption';
+                cap.textContent = item.alt || '(no caption)';
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'thumb-remove';
+                removeBtn.type = 'button';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.title = 'Remove this photo';
+                removeBtn.onclick = function () { removeGalleryPhoto(index); };
+                cell.appendChild(img);
+                cell.appendChild(cap);
+                cell.appendChild(removeBtn);
+                thumbGrid.appendChild(cell);
+            });
+        }
+
+        function removeGalleryPhoto(index) {
+            const list = getGallery();
+            const item = list[index];
+            if (!item) return;
+            if (!confirm('Remove "' + (item.alt || 'this photo') + '" from the gallery?')) return;
+            list.splice(index, 1);
+            saveGallery(list);
+            renderGallery();
+        }
+
+        function addGalleryPhoto() {
+            const fileInput = document.getElementById('admin-photo-file');
+            const captionInput = document.getElementById('admin-photo-caption');
+            const msg = document.getElementById('admin-add-msg');
+            msg.className = 'admin-msg';
+            msg.textContent = '';
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'Please choose a photo first.';
+                return;
+            }
+            const file = fileInput.files[0];
+            if (!file.type.startsWith('image/')) {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'Please choose an image file.';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const list = getGallery();
+                list.push({ src: e.target.result, alt: captionInput.value.trim() || 'Gallery photo' });
+                saveGallery(list);
+                renderGallery();
+                fileInput.value = '';
+                captionInput.value = '';
+                msg.className = 'admin-msg success';
+                msg.textContent = 'Photo added to the gallery.';
+            };
+            reader.onerror = function () {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'Could not read that file. Please try another photo.';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openAdminLogin() {
+            try {
+                if (sessionStorage.getItem(SESSION_KEY) === 'true') {
+                    openAdminPanel();
+                    return;
+                }
+            } catch (e) {}
+            document.getElementById('admin-login-msg').textContent = '';
+            document.getElementById('admin-pass-input').value = '';
+            document.getElementById('admin-login-overlay').classList.add('open');
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('admin-login-overlay').classList.remove('open');
+        }
+
+        function attemptAdminLogin() {
+            const input = document.getElementById('admin-pass-input');
+            const msg = document.getElementById('admin-login-msg');
+            if (input.value === getAdminPassword()) {
+                try { sessionStorage.setItem(SESSION_KEY, 'true'); } catch (e) {}
+                closeAdminLogin();
+                openAdminPanel();
+            } else {
+                msg.textContent = 'Incorrect password. Please try again.';
+            }
+        }
+
+        function openAdminPanel() {
+            renderAdminThumbs();
+            renderAdminVideoThumbs();
+            document.getElementById('admin-panel-overlay').classList.add('open');
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel-overlay').classList.remove('open');
+        }
+
+        function adminLogout() {
+            try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
+            closeAdminPanel();
+        }
+
+        function changeAdminPassword() {
+            const cur = document.getElementById('admin-cur-pass');
+            const next = document.getElementById('admin-new-pass');
+            const confirmPass = document.getElementById('admin-new-pass-confirm');
+            const msg = document.getElementById('admin-pass-msg');
+
+            if (cur.value !== getAdminPassword()) {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'Current password is incorrect.';
+                return;
+            }
+            if (next.value.length < 4) {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'New password must be at least 4 characters.';
+                return;
+            }
+            if (next.value !== confirmPass.value) {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'New password and confirmation do not match.';
+                return;
+            }
+            try {
+                localStorage.setItem(PASS_KEY, next.value);
+            } catch (e) {}
+            msg.className = 'admin-msg success';
+            msg.textContent = 'Password updated successfully.';
+            cur.value = ''; next.value = ''; confirmPass.value = '';
+        }
+
+        const DEFAULT_VIDEOS = [];
+        const VIDEO_KEY = 'mj_suiting_videos_v1';
+
+        function getVideos() {
+            try {
+                const raw = localStorage.getItem(VIDEO_KEY);
+                if (raw) return JSON.parse(raw);
+            } catch (e) {}
+            return DEFAULT_VIDEOS.slice();
+        }
+
+        function saveVideos(list) {
+            try {
+                localStorage.setItem(VIDEO_KEY, JSON.stringify(list));
+            } catch (e) {
+                alert('Could not save video changes. Your browser storage may be full - try removing an older video first, or use a shorter/smaller clip.');
+            }
+        }
+
+        function renderVideoGallery() {
+            const grid = document.getElementById('video-gallery-grid');
+            const emptyMsg = document.getElementById('video-gallery-empty');
+            if (!grid) return;
+            const list = getVideos();
+            grid.innerHTML = '';
+            if (list.length === 0) {
+                if (emptyMsg) emptyMsg.style.display = 'block';
+            } else {
+                if (emptyMsg) emptyMsg.style.display = 'none';
+                list.forEach(item => {
+                    const vid = document.createElement('video');
+                    vid.src = item.src;
+                    vid.controls = true;
+                    vid.preload = 'metadata';
+                    vid.setAttribute('aria-label', item.alt || 'Gallery video');
+                    grid.appendChild(vid);
+                });
+            }
+            renderAdminVideoThumbs();
+        }
+
+        function renderAdminVideoThumbs() {
+            const thumbGrid = document.getElementById('admin-video-thumb-grid');
+            if (!thumbGrid) return;
+            const list = getVideos();
+            thumbGrid.innerHTML = '';
+            if (list.length === 0) {
+                thumbGrid.innerHTML = '<p style="color:#888; font-size:0.85rem;">No videos in the gallery yet.</p>';
+                return;
+            }
+            list.forEach((item, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'admin-thumb video-thumb';
+                const vid = document.createElement('video');
+                vid.src = item.src;
+                vid.muted = true;
+                vid.preload = 'metadata';
+                const cap = document.createElement('div');
+                cap.className = 'thumb-caption';
+                cap.textContent = item.alt || '(no caption)';
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'thumb-remove';
+                removeBtn.type = 'button';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.title = 'Remove this video';
+                removeBtn.onclick = function () { removeGalleryVideo(index); };
+                cell.appendChild(vid);
+                cell.appendChild(cap);
+                cell.appendChild(removeBtn);
+                thumbGrid.appendChild(cell);
+            });
+        }
+
+        function removeGalleryVideo(index) {
+            const list = getVideos();
+            const item = list[index];
+            if (!item) return;
+            if (!confirm('Remove "' + (item.alt || 'this video') + '" from the gallery?')) return;
+            list.splice(index, 1);
+            saveVideos(list);
+            renderVideoGallery();
+        }
+
+        function addGalleryVideo() {
+            const fileInput = document.getElementById('admin-video-file');
+            const captionInput = document.getElementById('admin-video-caption');
+            const msg = document.getElementById('admin-video-add-msg');
+            msg.className = 'admin-msg';
+            msg.textContent = '';
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'Please choose a video first.';
+                return;
+            }
+            const file = fileInput.files[0];
+            if (!file.type.startsWith('video/')) {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'Please choose a video file.';
+                return;
+            }
+            if (file.size > 15 * 1024 * 1024) {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'That video is quite large (over 15MB) - it may fail to save. Try a shorter or more compressed clip.';
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const list = getVideos();
+                list.push({ src: e.target.result, alt: captionInput.value.trim() || 'Gallery video' });
+                saveVideos(list);
+                renderVideoGallery();
+                fileInput.value = '';
+                captionInput.value = '';
+                msg.className = 'admin-msg success';
+                msg.textContent = 'Video added to the gallery.';
+            };
+            reader.onerror = function () {
+                msg.className = 'admin-msg error';
+                msg.textContent = 'Could not read that file. Please try another video.';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        const LANGS = ['en', 'ur', 'ks'];
+        const RTL_LANGS = ['ur', 'ks'];
+        const INLINE_TAGS = ['SPAN', 'A', 'STRONG', 'B', 'I', 'EM', 'BUTTON'];
+        function displayFor(el) {
+            return INLINE_TAGS.includes(el.tagName) ? 'inline' : 'block';
+        }
+        function setLanguage(lang) {
+            LANGS.forEach(code => {
+                document.querySelectorAll('.lang-' + code).forEach(el => {
+                    el.style.display = (code === lang) ? displayFor(el) : 'none';
+                });
+                document.body.classList.toggle('lang-' + code + '-active', code === lang);
+                const tab = document.getElementById('tab-' + code);
+                if (tab) tab.classList.toggle('active', code === lang);
+            });
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', RTL_LANGS.includes(lang) ? 'rtl' : 'ltr');
+            try { localStorage.setItem('mj_suiting_lang', lang); } catch (e) {}
+        }
+
+        (function initLanguage() {
+            let saved = 'en';
+            try { saved = localStorage.getItem('mj_suiting_lang') || 'en'; } catch (e) {}
+            if (!LANGS.includes(saved)) saved = 'en';
+            setLanguage(saved);
+        })();
+
+        renderGallery();
+        renderVideoGallery();
+
+        document.getElementById('admin-login-overlay').addEventListener('click', function (e) {
+            if (e.target === this) closeAdminLogin();
+        });
+        document.getElementById('admin-panel-overlay').addEventListener('click', function (e) {
+            if (e.target === this) closeAdminPanel();
+        });
+        document.getElementById('admin-pass-input').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') attemptAdminLogin();
+        });
+    </script>
+</body></html>
